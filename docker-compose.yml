@@ -1,0 +1,38 @@
+services:
+  web:
+    profiles: [app]
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: ${DEPLOY_DATABASE_URL:-postgresql+psycopg://traceback:local-development-only@postgres:5432/traceback}
+      JWT_SECRET: ${JWT_SECRET:-}
+      ENVIRONMENT: development
+      SERVE_FRONTEND: 'true'
+      SEED_DEMO: ${SEED_DEMO:-true}
+      CORS_ORIGINS: http://localhost:8000,http://127.0.0.1:8000
+      AI_MODE: ${AI_MODE:-demo}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-gpt-4.1-mini}
+    volumes:
+      - traceback_files:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: traceback
+      POSTGRES_USER: traceback
+      POSTGRES_PASSWORD: local-development-only
+    ports:
+      - "5432:5432"
+    volumes:
+      - traceback_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U traceback"]
+      interval: 5s
+      retries: 10
+volumes:
+  traceback_pg:
+  traceback_files:
