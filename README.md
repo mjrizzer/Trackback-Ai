@@ -146,7 +146,7 @@ Set `.env`:
 DATABASE_URL=postgresql+psycopg://traceback:local-development-only@localhost:5432/traceback
 ```
 
-For Supabase, use its PostgreSQL connection URI with `postgresql+psycopg://` and `?sslmode=require`; URL-encode password special characters. Then run the same Alembic migration and seed commands. The REST API still enforces JWT authorization; this app does not use the Supabase browser SDK or expose database credentials. PostgreSQL is supported by the SQLAlchemy dialect but was not available for execution in this environment.
+For Supabase, use its PostgreSQL connection URI with `postgresql+psycopg://` and `?sslmode=require`; URL-encode password special characters. Then run the same Alembic migration and seed commands. The REST API still enforces JWT authorization; this app does not use the Supabase browser SDK or expose database credentials. PostgreSQL migrations and the backend suite have passed in GitHub Actions; a hosted Supabase project has not been connected.
 
 ## Verification
 
